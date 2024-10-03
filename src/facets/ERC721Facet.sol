@@ -1,19 +1,21 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.19;
 
-import {Address} from '../../lib/openzeppelin-contracts/contracts/utils/Address.sol';
-import {Context} from '../../lib/openzeppelin-contracts/contracts/utils/Context.sol';
+import {Address} from "../../lib/openzeppelin-contracts/contracts/utils/Address.sol";
+import {Context} from "../../lib/openzeppelin-contracts/contracts/utils/Context.sol";
 // import {IERC721} from '../../lib/openzeppelin-contracts/contracts/token/ERC721/IERC721.sol';
 // import {IERC721Enumerable} from '../../lib/openzeppelin-contracts/contracts/token/ERC721/extensions/IERC721Enumerable.sol';
 // import {IERC721Metadata} from '../../lib/openzeppelin-contracts/contracts/token/ERC721/extensions/IERC721Metadata.sol';
-import {LibERC721} from '../libraries/LibERC721.sol';
-import {Strings} from '../../lib/openzeppelin-contracts/contracts/utils/Strings.sol';
-import {LibContractOwner} from '../../lib/@lagunagames/lg-diamond-template/src/libraries/LibContractOwner.sol';
+import {LibERC721} from "../libraries/LibERC721.sol";
+import {Strings} from "../../lib/openzeppelin-contracts/contracts/utils/Strings.sol";
+import {LibContractOwner} from "../../lib/cu-osc-diamond-template/src/libraries/LibContractOwner.sol";
 
 /// NOTE: This contract implements ERC721, ERC721Enumerable, and ERC721Metadata.
 /// However, ERC165 is automatically part of all of our Diamonds, so the interface
 //  is disabled here in favor of SupportsInterfaceFacet.
-contract ERC721Facet is Context /*, IERC721, IERC721Metadata, IERC721Enumerable */ {
+contract ERC721Facet is
+    Context /*, IERC721, IERC721Metadata, IERC721Enumerable */
+{
     using Address for address;
     using Strings for uint256;
 
@@ -49,10 +51,15 @@ contract ERC721Facet is Context /*, IERC721, IERC721Metadata, IERC721Enumerable 
      *
      * Emits a {Transfer} event.
      */
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes calldata data) external virtual {
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes calldata data
+    ) external virtual {
         require(
             LibERC721.isApprovedOrOwner(_msgSender(), tokenId),
-            'ERC721: transfer caller is not owner nor approved'
+            "ERC721: transfer caller is not owner nor approved"
         );
         LibERC721.safeTransfer(from, to, tokenId, data);
     }
@@ -73,12 +80,16 @@ contract ERC721Facet is Context /*, IERC721, IERC721Metadata, IERC721Enumerable 
      *
      * Emits a {Transfer} event.
      */
-    function safeTransferFrom(address from, address to, uint256 tokenId) external virtual {
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external virtual {
         require(
             LibERC721.isApprovedOrOwner(_msgSender(), tokenId),
-            'ERC721: transfer caller is not owner nor approved'
+            "ERC721: transfer caller is not owner nor approved"
         );
-        LibERC721.safeTransfer(from, to, tokenId, '');
+        LibERC721.safeTransfer(from, to, tokenId, "");
     }
 
     /**
@@ -97,10 +108,14 @@ contract ERC721Facet is Context /*, IERC721, IERC721Metadata, IERC721Enumerable 
      *
      * Emits a {Transfer} event.
      */
-    function transferFrom(address from, address to, uint256 tokenId) external virtual {
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external virtual {
         require(
             LibERC721.isApprovedOrOwner(_msgSender(), tokenId),
-            'ERC721: transfer caller is not owner nor approved'
+            "ERC721: transfer caller is not owner nor approved"
         );
 
         LibERC721.transfer(from, to, tokenId);
@@ -121,11 +136,12 @@ contract ERC721Facet is Context /*, IERC721, IERC721Metadata, IERC721Enumerable 
      */
     function approve(address to, uint256 tokenId) external {
         address owner = LibERC721.ownerOf(tokenId);
-        require(to != owner, 'ERC721: approval to current owner');
+        require(to != owner, "ERC721: approval to current owner");
 
         require(
-            _msgSender() == owner || LibERC721.isApprovedForAll(owner, _msgSender()),
-            'ERC721: approve caller is not owner nor approved for all'
+            _msgSender() == owner ||
+                LibERC721.isApprovedForAll(owner, _msgSender()),
+            "ERC721: approve caller is not owner nor approved for all"
         );
 
         LibERC721.approve(to, tokenId);
@@ -152,7 +168,9 @@ contract ERC721Facet is Context /*, IERC721, IERC721Metadata, IERC721Enumerable 
      *
      * - `tokenId` must exist.
      */
-    function getApproved(uint256 tokenId) external view returns (address operator) {
+    function getApproved(
+        uint256 tokenId
+    ) external view returns (address operator) {
         return LibERC721.getApproved(tokenId);
     }
 
@@ -161,7 +179,10 @@ contract ERC721Facet is Context /*, IERC721, IERC721Metadata, IERC721Enumerable 
      *
      * See {setApprovalForAll}
      */
-    function isApprovedForAll(address owner, address operator) external view returns (bool) {
+    function isApprovedForAll(
+        address owner,
+        address operator
+    ) external view returns (bool) {
         return LibERC721.isApprovedForAll(owner, operator);
     }
 
@@ -197,8 +218,14 @@ contract ERC721Facet is Context /*, IERC721, IERC721Metadata, IERC721Enumerable 
      * @dev Returns a token ID owned by `owner` at a given `index` of its token list.
      * Use along with {balanceOf} to enumerate all of ``owner``'s tokens.
      */
-    function tokenOfOwnerByIndex(address owner, uint256 index) external view returns (uint256) {
-        require(index < LibERC721.balanceOf(owner), 'ERC721Enumerable: owner index out of bounds');
+    function tokenOfOwnerByIndex(
+        address owner,
+        uint256 index
+    ) external view returns (uint256) {
+        require(
+            index < LibERC721.balanceOf(owner),
+            "ERC721Enumerable: owner index out of bounds"
+        );
         return LibERC721.erc721Storage().ownedTokens[owner][index];
     }
 
@@ -207,7 +234,10 @@ contract ERC721Facet is Context /*, IERC721, IERC721Metadata, IERC721Enumerable 
      * Use along with {totalSupply} to enumerate all tokens.
      */
     function tokenByIndex(uint256 index) external view returns (uint256) {
-        require(index < LibERC721.erc721Storage().allTokens.length, 'ERC721Enumerable: global index out of bounds');
+        require(
+            index < LibERC721.erc721Storage().allTokens.length,
+            "ERC721Enumerable: global index out of bounds"
+        );
         return LibERC721.erc721Storage().allTokens[index];
     }
 

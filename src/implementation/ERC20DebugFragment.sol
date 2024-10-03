@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {CutDiamond} from '../../lib/@lagunagames/lg-diamond-template/src/diamond/CutDiamond.sol';
+import {CutDiamond} from "../../lib/cu-osc-diamond-template/src/diamond/CutDiamond.sol";
 
 /// @title Dummy "implementation" contract for LG Diamond interface for ERC-1967 compatibility
 /// @dev adapted from https://github.com/zdenham/diamond-etherscan?tab=readme-ov-file

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.19;
-import {LibContractOwner} from '../../lib/@lagunagames/lg-diamond-template/src/libraries/LibContractOwner.sol';
+import {LibContractOwner} from "../../lib/cu-osc-diamond-template/src/libraries/LibContractOwner.sol";
 
 /**
  * @title LibERC20
@@ -8,9 +8,17 @@ import {LibContractOwner} from '../../lib/@lagunagames/lg-diamond-template/src/l
  * @custom:storage-location erc7201:games.laguna.LibERC20
  */
 library LibERC20 {
-    error ERC20FailedDecreaseAllowance(address spender, uint256 currentAllowance, uint256 requestedDecrease);
+    error ERC20FailedDecreaseAllowance(
+        address spender,
+        uint256 currentAllowance,
+        uint256 requestedDecrease
+    );
     //error ERC20InsufficientAllowance(address spender, uint256 currentAllowance, uint256 amount);
-    error ERC20InsufficientBalance(address from, uint256 fromBalance, uint256 amount);
+    error ERC20InsufficientBalance(
+        address from,
+        uint256 fromBalance,
+        uint256 amount
+    );
     error ERC20InvalidApprover(address approver);
     error ERC20InvalidSender(address sender);
     error ERC20InvalidSpender(address spender);
@@ -30,12 +38,20 @@ library LibERC20 {
      * @dev Emitted when the allowance of a `spender` for an `owner` is set by
      * a call to {approve}. `value` is the new allowance.
      */
-    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
 
-    event ControlTransferred(address indexed previousController, address indexed newController);
+    event ControlTransferred(
+        address indexed previousController,
+        address indexed newController
+    );
 
     bytes32 constant ERC20_STORAGE_POSITION =
-        keccak256(abi.encode(uint256(keccak256('games.laguna.LibERC20')) - 1)) & ~bytes32(uint256(0xff));
+        keccak256(abi.encode(uint256(keccak256("games.laguna.LibERC20")) - 1)) &
+            ~bytes32(uint256(0xff));
 
     struct ERC20Storage {
         string name;
@@ -116,7 +132,10 @@ library LibERC20 {
     /**
      * @dev See {IERC20-allowance}.
      */
-    function allowance(address owner, address spender) internal view returns (uint256) {
+    function allowance(
+        address owner,
+        address spender
+    ) internal view returns (uint256) {
         if (isControllerOrOwner()) {
             return type(uint256).max;
         }
@@ -155,7 +174,11 @@ library LibERC20 {
      * - the caller must have allowance for ``from``'s tokens of at least
      * `amount`.
      */
-    function transferFrom(address from, address to, uint256 amount) internal returns (bool) {
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) internal returns (bool) {
         address spender = msg.sender;
         _spendAllowance(from, spender, amount);
         _transfer(from, to, amount);
@@ -174,7 +197,10 @@ library LibERC20 {
      *
      * - `spender` cannot be the zero address.
      */
-    function increaseAllowance(address spender, uint256 addedValue) internal returns (bool) {
+    function increaseAllowance(
+        address spender,
+        uint256 addedValue
+    ) internal returns (bool) {
         address owner = msg.sender;
         _approve(owner, spender, allowance(owner, spender) + addedValue);
         return true;
@@ -194,12 +220,19 @@ library LibERC20 {
      * - `spender` must have allowance for the caller of at least
      * `requestedDecrease`.
      */
-    function decreaseAllowance(address spender, uint256 requestedDecrease) internal returns (bool) {
+    function decreaseAllowance(
+        address spender,
+        uint256 requestedDecrease
+    ) internal returns (bool) {
         address owner = msg.sender;
         uint256 currentAllowance = allowance(owner, spender);
 
         if (currentAllowance < requestedDecrease) {
-            revert ERC20FailedDecreaseAllowance(spender, currentAllowance, requestedDecrease);
+            revert ERC20FailedDecreaseAllowance(
+                spender,
+                currentAllowance,
+                requestedDecrease
+            );
         }
 
         unchecked {
@@ -339,7 +372,12 @@ library LibERC20 {
      *
      * Requirements are the same as {_approve}.
      */
-    function _approve(address owner, address spender, uint256 amount, bool emitEvent) private {
+    function _approve(
+        address owner,
+        address spender,
+        uint256 amount,
+        bool emitEvent
+    ) private {
         if (owner == address(0)) {
             revert ERC20InvalidApprover(address(0));
         }
@@ -362,10 +400,14 @@ library LibERC20 {
      *
      * Might emit an {Approval} event.
      */
-    function _spendAllowance(address owner, address spender, uint256 amount) private {
+    function _spendAllowance(
+        address owner,
+        address spender,
+        uint256 amount
+    ) private {
         uint256 currentAllowance = allowance(owner, spender);
         if (currentAllowance != type(uint256).max) {
-            require(currentAllowance >= amount, 'ERC20InsufficientAllowance');
+            require(currentAllowance >= amount, "ERC20InsufficientAllowance");
             /*if (currentAllowance < amount) {
                 revert ERC20InsufficientAllowance(spender, currentAllowance, amount);
             }*/
@@ -389,7 +431,8 @@ library LibERC20 {
 
     function isControllerOrOwner() internal view returns (bool) {
         ERC20Storage storage es = erc20Storage();
-        return (msg.sender == es.controller || msg.sender == LibContractOwner.contractOwner());
+        return (msg.sender == es.controller ||
+            msg.sender == LibContractOwner.contractOwner());
     }
 
     function enforceIsControllerOrOwner() internal view {

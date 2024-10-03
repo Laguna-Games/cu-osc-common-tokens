@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {CutDiamond} from '../../lib/@lagunagames/lg-diamond-template/src/diamond/CutDiamond.sol';
+import {CutDiamond} from "../../lib/cu-osc-diamond-template/src/diamond/CutDiamond.sol";
 
 /// @title Dummy "implementation" contract for LG Diamond interface for ERC-1967 compatibility
 /// @dev adapted from https://github.com/zdenham/diamond-etherscan?tab=readme-ov-file
 /// @dev This interface is used internally to call endpoints on a deployed diamond cluster.
 contract ERC20Fragment {
-
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
      * another (`to`).
@@ -20,8 +19,12 @@ contract ERC20Fragment {
      * @dev Emitted when the allowance of a `spender` for an `owner` is set by
      * a call to {approve}. `value` is the new allowance.
      */
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-    
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
+
     /**
      * @dev Returns the name of the token.
      */
@@ -42,7 +45,10 @@ contract ERC20Fragment {
     /**
      * @dev See {IERC20-allowance}.
      */
-    function allowance(address owner, address spender) external view returns (uint256) {}
+    function allowance(
+        address owner,
+        address spender
+    ) external view returns (uint256) {}
 
     /**
      * @dev See {IERC20-approve}.
@@ -90,7 +96,11 @@ contract ERC20Fragment {
      * - `recipient` cannot be the zero address.
      * - the caller must have a balance of at least `amount`.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool) {}
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool) {}
 
     /**
      * @dev See {IERC20-transfer}.
@@ -100,7 +110,10 @@ contract ERC20Fragment {
      * - `recipient` cannot be the zero address.
      * - the caller must have a balance of at least `amount`.
      */
-    function transfer(address recipient, uint256 amount) external returns (bool) {}
+    function transfer(
+        address recipient,
+        uint256 amount
+    ) external returns (bool) {}
 
     /**
      * @dev Atomically increases the allowance granted to `spender` by the caller.
@@ -114,7 +127,10 @@ contract ERC20Fragment {
      *
      * - `spender` cannot be the zero address.
      */
-    function increaseAllowance(address spender, uint256 addedValue) external virtual returns (bool) {}
+    function increaseAllowance(
+        address spender,
+        uint256 addedValue
+    ) external virtual returns (bool) {}
 
     /**
      * @dev Atomically decreases the allowance granted to `spender` by the caller.
@@ -130,5 +146,8 @@ contract ERC20Fragment {
      * - `spender` must have allowance for the caller of at least
      * `subtractedValue`.
      */
-    function decreaseAllowance(address spender, uint256 subtractedValue) external virtual returns (bool) {}
+    function decreaseAllowance(
+        address spender,
+        uint256 subtractedValue
+    ) external virtual returns (bool) {}
 }
