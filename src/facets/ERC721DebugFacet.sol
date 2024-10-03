@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.19;
 
-import {LibTestnetDebugInterface} from "../../lib/@lagunagames/cu-common/src/libraries/LibTestnetDebugInterface.sol";
+import {LibTestnetDebugInterface} from "../../lib/cu-osc-common/src/libraries/LibTestnetDebugInterface.sol";
 import {LibERC721} from "../libraries/LibERC721.sol";
-import {LibValidate} from "../../lib/@lagunagames/cu-common/src/libraries/LibValidate.sol";
+import {LibValidate} from "../../lib/cu-osc-common/src/libraries/LibValidate.sol";
 import {LibContractOwner} from "../../lib/cu-osc-diamond-template/src/libraries/LibContractOwner.sol";
 
 /// @title Debug Facet for "Access Control Badges" Terminus Diamond
